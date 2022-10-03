@@ -199,14 +199,77 @@ export type ApplicationDetails = {
 };
 
 /**
+ * AppointmentSegment
+ *
+ * Defines an appointment segment of a booking.
+ *
+ *
+ * @property {number} duration_minutes
+ *
+ * The time span in minutes of an appointment segment.
+ *
+ * @property {string} service_variation_id
+ *
+ * The ID of the CatalogItemVariation object representing the service booked in this segment.
+ *
+ * @property {string} team_member_id
+ *
+ * The ID of the TeamMember object representing the team member booked in this segment.
+ *
+ * @property {string} service_variation_version
+ *
+ * The current version of the item variation representing the service booked in this segment.
+ *
+ * @property {number} intermission_minutes
+ *
+ * Read only Time between the end of this segment and the beginning of the subsequent segment.
+ *
+ * @property {boolean) any_team_member
+ *
+ * Read only Whether the customer accepts any team member, instead of a specific one, to serve this segment.
+ *
+ * @property {string[]} resource_ids
+ *
+ * Read only The IDs of the seller-accessible resources used for this appointment segment.
  *
  */
-export type AppointmentSegment = {};
+export type AppointmentSegment = {
+  duration_minutes: number;
+  service_variation_id: string;
+  team_member_id: string;
+  service_variation_version: string;
+  intermission_minutes: number;
+  any_team_member: boolean;
+  resource_ids: string;
+};
 
 /**
+ * Availability
+ *
+ * Defines an appointment slot that encapsulates the appointment segments, location and starting time available for booking.
+ *
+ * @property {string} start_at
+ *
+ * The RFC 3339 timestamp specifying the beginning time of the slot available for booking.
+ * Examples for January 25th, 2020 6:25:34pm Pacific Standard Time:
+ * UTC: 2020-01-26T02:25:34Z
+ * Pacific Standard Time with UTC offset: 2020-01-25T18:25:34-08:00
+ *
+ * @property {string} location_id
+ *
+ * Read only The ID of the location available for booking.
+ * Max Length 32
+ *
+ * @property {AppointmentSegment[]} appointment_segments
+ *
+ * The list of appointment segments available for booking
  *
  */
-export type Availability = {};
+export type Availability = {
+  start_at: string;
+  location_id: string;
+  appointment_segments: AppointmentSegment[];
+};
 
 /**
  *
