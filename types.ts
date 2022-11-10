@@ -1,8 +1,24 @@
 import {
   ApplicationDetailsExternalSquareProduct,
   BankAccountType,
+  BookingBookingSource,
+  BookingCreatorDetailsCreatorType,
+  BookingStatus,
+  BusinessAppointmentSettingsAlignmentTime,
+  BusinessAppointmentSettingsBookingLocationType,
+  BusinessAppointmentSettingsCancellationPolicy,
+  BusinessAppointmentSettingsMaxAppointmentsPerDayLimitType,
+  BusinessBookingProfileBookingPolicy,
+  BusinessBookingProfileCustomerTimezoneChoice,
+  CardBrand,
+  CardCoBrand,
+  CardPrepaidType,
+  CardType,
+  CashDrawerEventType,
+  CashDrawerShiftState,
   Country,
   Currency,
+  DayOfWeek,
   Product,
 } from './enums';
 
@@ -272,214 +288,1611 @@ export type Availability = {
 };
 
 /**
+ * BankAccount
+ *
+ * Represents a bank account.
+ * For more information about linking a bank account to a Square account, see Bank Accounts API.
+ *
+ * @property {string} id
+ *
+ * The unique, Square-issued identifier for the bank account.
+ *
+ *
+ * @property {string} account_number_suffix
+ *
+ * The last few digits of the account number.
+ *
+ *
+ * @property {string} country
+ *
+ * The ISO 3166 Alpha-2 country code where the bank account is based.
+ *
+ *
+ * @property {string} currency
+ *
+ * The 3-character ISO 4217 currency code indicating the operating currency of the bank account. For example, the currency code for US dollars is USD.
+ *
+ *
+ * @property {string} account_type
+ *
+ * The financial purpose of the associated bank account.
+ *
+ *
+ * @property {string} holder_name
+ *
+ * Name of the account holder. This name must match the name on the targeted bank account record.
+ *
+ *
+ * @property {string} primary_bank_identification_number
+ *
+ * Primary identifier for the bank. For more information, see Bank Accounts API.
+ *
+ *
+ * @property {string} secondary_bank_identification_number
+ *
+ * Secondary identifier for the bank. For more information, see Bank Accounts API.
+ *
+ *
+ * @property {string} debit_mandate_reference_id
+ *
+ * Reference identifier that will be displayed to UK bank account owners when collecting direct debit authorization. Only required for UK bank accounts.
+ *
+ *
+ * @property {string} reference_id
+ *
+ * Client-provided identifier for linking the banking account to an entity in a third-party system (for example, a bank account number or a user identifier).
+ *
+ *
+ * @property {string} location_id
+ *
+ * The location to which the bank account belongs.
+ *
+ *
+ * @property {string} status
+ *
+ * Read-only. The current verification status of this BankAccount object.
+ *
+ *
+ * @property {boolean} creditable
+ *
+ * Indicates whether it is possible for Square to send money to this bank account.
+ *
+ *
+ * @property {boolean} debitable
+ *
+ * Indicates whether it is possible for Square to take money from this bank account.
+ *
+ *
+ * @property {string} fingerprint
+ *
+ * A Square-assigned, unique identifier for the bank account based on the account information. The account fingerprint can be used to compare account entries and determine if the they represent the same real-world bank account.
+ *
+ *
+ * @property {number} version
+ *
+ * The current version of the BankAccount.
+ *
+ *
+ * @property {string} bank_name
+ *
+ * Read only. Name of actual financial institution. For example "Bank of America".
  *
  */
-export type BankAccount = {};
+export type BankAccount = {
+  id: string;
+  account_number_suffix: string;
+  country: string;
+  currency: string;
+  account_type: string;
+  holder_name: string;
+  primary_bank_identification_number: string;
+  secondary_bank_identification_number: string;
+  debit_mandate_reference_id: string;
+  reference_id: string;
+  location_id: string;
+  status: string;
+  creditable: boolean;
+  debitable: boolean;
+  fingerprint: string;
+  version: number;
+  bank_name: string;
+};
 
 /**
+ * BankAccountCreatedWebhookData
+ *
+ *
+ *
+ * @property {string} type
+ *
+ * Name of the affected object’s type, "bank_account".
+ *
+ *
+ * @property {string} id
+ *
+ * ID of the affected bank account.
+ *
+ *
+ * @property {BankAccountCreatedWebhookObject} object
+ *
+ * An object containing the created bank account.
  *
  */
-export type BankAccountCreatedWebhookData = {};
+export type BankAccountCreatedWebhookData = {
+  type: string;
+  id: string;
+  object: BankAccountCreatedWebhookObject;
+};
 
 /**
+ * BankAccountCreatedWebhookObject
+ *
+ *
+ *
+ * @property {BankAccount} bank_account
+ *
+ * The created bank account.
  *
  */
-export type BankAccountCreatedWebhookObject = {};
+export type BankAccountCreatedWebhookObject = {
+  bank_account: BankAccount;
+};
 
 /**
+ * BankAccountDisabledWebhookData
+ *
+ *
+ *
+ * @property {string} type
+ *
+ * Name of the affected object’s type, "bank_account".
+ *
+ *
+ * @property {string} id
+ *
+ * ID of the affected bank account.
+ *
+ *
+ * @property {BankAccountDisabledWebhookObject} object
+ *
+ * An object containing the disabled bank account.
  *
  */
-export type BankAccountDisabledWebhookData = {};
+export type BankAccountDisabledWebhookData = {
+  type: string;
+  id: string;
+  object: BankAccountDisabledWebhookObject;
+};
 
 /**
+ * BankAccountDisabledWebhookObject
+ *
+ *
+ *
+ * @property {BankAccount} bank_account
+ *
+ * The disabled bank account.
  *
  */
-export type BankAccountDisabledWebhookObject = {};
+export type BankAccountDisabledWebhookObject = {
+  bank_account: BankAccount;
+};
 
 /**
+ * BankAccountPaymentDetails
+Additional details about BANK_ACCOUNT type payments.
+ *
+ *
+ *
+ * @property {string} bank_name
+ *
+ * The name of the bank associated with the bank account.      
+ *
+ *
+ * @property {string} transfer_type
+ *
+ * The type of the bank transfer. The type can be ACH or UNKNOWN.
+ *
+ *
+ * @property {string} account_ownership_type
+ *
+ * The ownership type of the bank account performing the transfer. The type can be INDIVIDUAL, COMPANY, or UNKNOWN.
+ *
+ *
+ * @property {string} fingerprint
+ *
+ * Uniquely identifies the bank account for this seller and can be used to determine if payments are from the same bank account.
+ *
+ *
+ * @property {string} country
+ *
+ * The two-letter ISO code representing the country the bank account is located in.
+ *
+ *
+ * @property {string} statement_description
+ *
+ * The statement description as sent to the bank.
+ *
+ *
+ * @property {ACHDetails} ach_details
+ *
+ * ACH-specific information about the transfer. The information is only populated if the transfer_type is ACH.
+ *
+ *
+ * @property {Error[]} errors
+ *
+ * Information about errors encountered during the request.    
  *
  */
-export type BankAccountPaymentDetails = {};
+export type BankAccountPaymentDetails = {
+  bank_name: string;
+  transfer_type: string;
+  account_ownership_type: string;
+  fingerprint: string;
+  country: string;
+  statement_description: string;
+  ach_details: ACHDetails;
+  errors: Error[];
+};
 
 /**
+ * BankAccountVerifiedWebhookData
+ *
+ *
+ *
+ * @property {string} type
+ *
+ * Name of the affected object’s type, "bank_account".
+ *
+ *
+ * @property {string} id
+ *
+ * ID of the affected bank account.
+ *
+ *
+ * @property {BankAccountVerifiedWebhookObject} object
+ *
+ * An object containing the verified bank account.
  *
  */
-export type BankAccountVerifiedWebhookData = {};
+export type BankAccountVerifiedWebhookData = {
+  type: string;
+  id: string;
+  object: BankAccountVerifiedWebhookObject;
+};
 
 /**
+ * BankAccountVerifiedWebhookObject
+ *
+ *
+ *
+ * @property {BankAccount} bank_account
+ *
+ * The verified bank account.
  *
  */
-export type BankAccountVerifiedWebhookObject = {};
+export type BankAccountVerifiedWebhookObject = {
+  bank_account: BankAccount;
+};
 
 /**
+ * Booking
+Represents a booking as a time-bound service contract for a seller's staff member to provide a specified service at a given location to a requesting customer in one or more appointment segments.
+ *
+ *
+ *
+ * @property {string} id
+ *
+ * Read only A unique ID of this object representing a booking.
+ *
+ *
+ * @property {number} version
+ *
+ * The revision number for the booking used for optimistic concurrency.
+ *
+ *
+ * @property {string} status
+ *
+ * Read only The status of the booking, describing where the booking stands with respect to the booking state machine.        
+ *
+ *
+ * @property {string} created_at
+ *
+ * Read only The RFC 3339 timestamp specifying the creation time of this booking.
+ *
+ *
+ * @property {UTC: 2020-01-26T02:25:34Z} Examples for January 25th, 2020 6:25:34pm Pacific Standard Time:
+ *
+ * Read only The RFC 3339 timestamp specifying the most recent update time of this booking.
+ *
+ *
+ * @property {UTC: 2020-01-26T02:25:34Z} Examples for January 25th, 2020 6:25:34pm Pacific Standard Time:
+ *
+ * The RFC 3339 timestamp specifying the starting time of this booking.
+ *
+ *
+ * @property {UTC: 2020-01-26T02:25:34Z} Examples for January 25th, 2020 6:25:34pm Pacific Standard Time:
+ *
+ * The ID of the Location object representing the location where the booked service is provided. Once set when the booking is created, its value cannot be changed.
+ *
+ *
+ * @property {string} customer_id
+ *
+ * The ID of the Customer object representing the customer receiving the booked service.
+ *
+ *
+ * @property {string} customer_note
+ *
+ * The free-text field for the customer to supply notes about the booking. For example, the note can be preferences that cannot be expressed by supported attributes of a relevant CatalogObject instance.
+ *
+ *
+ * @property {string} seller_note
+ *
+ * The free-text field for the seller to supply notes about the booking. For example, the note can be preferences that cannot be expressed by supported attributes of a specific CatalogObject instance. This field should not be visible to customers.     
+ *
+ *
+ * @property {AppointmentSegment [ ]} appointment_segments     
+ *
+ * A list of appointment segments for this booking.
+ *
+ *
+ * @property {number} transition_time_minutes
+ *
+ * Read only Additional time at the end of a booking. Applications should not make this field visible to customers of a seller.
+ *
+ *
+ * @property {boolean} all_day
+ *
+ * Read only Whether the booking is of a full business day.    
+ *
+ *
+ * @property {string} location_type
+ *
+ * The type of location where the booking is held. Access to this field requires seller-level permissions.
+ *
+ *
+ * @property {BookingCreatorDetails} creator_details
+ *
+ * Read only Information about the booking creator.
+ *
+ *
+ * @property {BookingBookingSource} source
+ *
+ * Read only The source of the booking. Access to this field requires seller-level permissions.
  *
  */
-export type Booking = {};
+export type Booking = {
+  id: string;
+  version: number;
+  status: BookingStatus;
+  created_at: string;
+  updated_at: string;
+  start_at: string;
+  location_id: string;
+  customer_id: string;
+  customer_note: string;
+  seller_note: string;
+  appointment_segments: AppointmentSegment[];
+  transition_time_minutes: number;
+  all_day: boolean;
+  location_type: BusinessAppointmentSettingsBookingLocationType;
+  creator_details: BookingCreatorDetails;
+  source: BookingBookingSource;
+};
 
 /**
+ * BookingCreatedWebhookData
+ *
+ *
+ *
+ * @property {string} type
+ *
+ * The type of the event data object. The value is "booking".
+ *
+ *
+ * @property {string} id
+ *
+ * The ID of the event data object.
+ *
+ *
+ * @property {BookingCreatedWebhookObject} object
+ *
+ * An object containing the created booking.
  *
  */
-export type BookingCreatedWebhookData = {};
+export type BookingCreatedWebhookData = {
+  type: string;
+  id: string;
+  object: BookingCreatedWebhookObject;
+};
 
 /**
+ * BookingCreatedWebhookObject
+ *
+ *
+ *
+ * @property {Booking} booking
+ *
+ * The created booking.
  *
  */
-export type BookingCreatedWebhookObject = {};
+export type BookingCreatedWebhookObject = {
+  booking: Booking;
+};
+
+/** 
+ * BookingCreatorDetails
+Information about a booking creator.
+ *
+ *
+ *
+ * @property {BookingCreatorDetailsCreatorType} creator_type
+ *
+ * Read only The seller-accessible type of the creator of the booking.
+ *
+ *
+ * @property {string} team_member_id
+ *
+ * Read only The ID of the team member who created the booking, when the booking creator is of the TEAM_MEMBER type. Access to this field requires seller-level permissions.
+ *
+ *
+ * @property {string} customer_id
+ *
+ * Read only The ID of the customer who created the booking, when the booking creator is of the CUSTOMER type. Access to this field requires seller-level permissions.
+ *
+ */
+export type BookingCreatorDetails = {
+  creator_type: BookingCreatorDetailsCreatorType;
+  team_member_id: string;
+  customer_id: string;
+};
 
 /**
+ * BookingUpdatedWebhookData
+ *
+ *
+ *
+ * @property {string} type
+ *
+ * The type of the event data object. The value is "booking".
+ *
+ *
+ * @property {string} id
+ *
+ * The ID of the event data object.
+ *
+ *
+ * @property {BookingUpdatedWebhookObject} object
+ *
+ * An object containing the updated booking.
  *
  */
-export type BookingCreatorDetails = {};
+export type BookingUpdatedWebhookData = {
+  type: string;
+  id: string;
+  object: BookingUpdatedWebhookObject;
+};
 
 /**
+ * BookingUpdatedWebhookObject
+ *
+ *
+ *
+ * @property {Booking} booking
+ *
+ * The updated booking.
  *
  */
-export type BookingUpdatedWebhookData = {};
+export type BookingUpdatedWebhookObject = {
+  booking: Booking;
+};
+
+/** 
+ * Break
+A record of an employee's break during a shift.
+ *
+ *
+ *
+ * @property {string} id
+ *
+ * The UUID for this object.
+ *
+ *
+ * @property {string} start_at
+ *
+ * RFC 3339; follows the same timezone information as Shift. Precision up to the minute is respected; seconds are truncated.  
+ *
+ *
+ * @property {string} break_type_id
+ *
+ * The BreakType that this Break was templated on.
+ *
+ *
+ * @property {string} name
+ *
+ * A human-readable name.
+ *
+ *
+ * @property {string} expected_duration
+ *
+ * Format: RFC-3339 P[n]Y[n]M[n]DT[n]H[n]M[n]S. The expected length of the break.
+ *
+ *
+ * @property {boolean} is_paid
+ *
+ * Whether this break counts towards time worked for compensation purposes.
+ *
+ */
+export type Break = {
+  id: string;
+  start_at: string;
+  break_type_id: string;
+  name: string;
+  expected_duration: string;
+  is_paid: boolean;
+};
+
+/** 
+ * BreakType
+A defined break template that sets an expectation for possible Break instances on a Shift.
+ *
+ *
+ *
+ * @property {string} id
+ *
+ * The UUID for this object.
+ *
+ *
+ * @property {string} location_id
+ *
+ * The ID of the business location this type of break applies to.
+ *
+ *
+ * @property {string} break_name
+ *
+ * A human-readable name for this type of break. The name is displayed to employees in Square products.
+ *
+ *
+ * @property {string} expected_duration
+ *
+ * Format: RFC-3339 P[n]Y[n]M[n]DT[n]H[n]M[n]S. The expected length of this break. Precision less than minutes is truncated.  
+ *
+ *
+ * @property {boolean} is_paid
+ *
+ * Whether this break counts towards time worked for compensation purposes.
+ *
+ *
+ * @property {number} version
+ *
+ * Used for resolving concurrency issues. The request fails if the version provided does not match the server version at the time of the request. If a value is not provided, Square's servers execute a "blind" write; potentially overwriting another writer's data.
+ *
+ *
+ * @property {string} created_at
+ *
+ * Read only A read-only timestamp in RFC 3339 format.
+ *
+ *
+ * @property {string} updated_at
+ *
+ * Read only A read-only timestamp in RFC 3339 format.
+ *
+ */
+export type BreakType = {
+  id: string;
+  location_id: string;
+  break_name: string;
+  expected_duration: string;
+  is_paid: boolean;
+  version: number;
+  created_at: string;
+  updated_at: string;
+};
 
 /**
+ * BusinessAppointmentSettings
+ *
+ * The service appointment settings, including where and how the service is provided.
+ *
+ *
+ * @property {string [ ]} location_types
+ *
+ * Types of the location allowed for bookings.
+ *
+ *
+ * @property {string} alignment_time
+ *
+ * The time unit of the service duration for bookings.
+ *
+ *
+ * @property {number} min_booking_lead_time_seconds
+ *
+ * The minimum lead time in seconds before a service can be booked. Bookings must be created at least this far ahead of the booking's starting time.
+ *
+ *
+ * @property {number} max_booking_lead_time_seconds
+ *
+ * The maximum lead time in seconds before a service can be booked. Bookings must be created at most this far ahead of the booking's starting time.
+ *
+ *
+ * @property {boolean} any_team_member_booking_enabled
+ *
+ * Indicates whether a customer can choose from all available time slots and have a staff member assigned automatically (true) or not (false).
+ *
+ *
+ * @property {boolean} multiple_service_booking_enabled
+ *
+ * Indicates whether a customer can book multiple services in a single online booking.
+ *
+ *
+ * @property {string} max_appointments_per_day_limit_type
+ *
+ * Indicates whether the daily appointment limit applies to team members or to business locations.
+ *
+ *
+ * @property {number} max_appointments_per_day_limit
+ *
+ * The maximum number of daily appointments per team member or per location.
+ *
+ *
+ * @property {number} cancellation_window_seconds
+ *
+ * The cut-off time in seconds for allowing clients to cancel or reschedule an appointment.
+ *
+ *
+ * @property {Money} cancellation_fee_money
+ *
+ * The flat-fee amount charged for a no-show booking.
+ *
+ *
+ * @property {string} cancellation_policy
+ *
+ * The cancellation policy adopted by the seller.
+ *
+ *
+ * @property {string} cancellation_policy_text
+ *
+ * The free-form text of the seller's cancellation policy.
+ *
+ *
+ * @property {boolean} skip_booking_flow_staff_selection
+ *
+ * Indicates whether customers has an assigned staff member (true) or can select s staff member of their choice (false).
  *
  */
-export type BookingUpdatedWebhookObject = {};
+export type BusinessAppointmentSettings = {
+  location_types: BusinessAppointmentSettingsBookingLocationType[];
+  alignment_time: BusinessAppointmentSettingsAlignmentTime;
+  min_booking_lead_time_seconds: number;
+  max_booking_lead_time_seconds: number;
+  any_team_member_booking_enabled: boolean;
+  multiple_service_booking_enabled: boolean;
+  max_appointments_per_day_limit_type: BusinessAppointmentSettingsMaxAppointmentsPerDayLimitType;
+  max_appointments_per_day_limit: number;
+  cancellation_window_seconds: number;
+  cancellation_fee_money: Money;
+  cancellation_policy: BusinessAppointmentSettingsCancellationPolicy;
+  cancellation_policy_text: string;
+  skip_booking_flow_staff_selection: boolean;
+};
 
 /**
+ * BusinessBookingProfile
+ *
+ *
+ *
+ * @property {string} seller_id
+ *
+ * The ID of the seller, obtainable using the Merchants API.
+ *
+ *
+ * @property {string} created_at
+ *
+ * Read only The RFC 3339 timestamp specifying the booking's creation time.
+ *
+ *
+ * @property {boolean} booking_enabled
+ *
+ * Indicates whether the seller is open for booking.
+ *
+ *
+ * @property {string} customer_timezone_choice
+ *
+ * The choice of customer's time zone information of a booking. The Square online booking site and all notifications to customers uses either the seller location’s time zone or the time zone the customer chooses at booking.
+ *
+ *
+ * @property {string} booking_policy
+ *
+ * The policy for the seller to automatically accept booking requests (ACCEPT_ALL) or not (REQUIRES_ACCEPTANCE).
+ *
+ *
+ * @property {boolean} allow_user_cancel
+ *
+ * Indicates whether customers can cancel or reschedule their own bookings (true) or not (false).
+ *
+ *
+ * @property {BusinessAppointmentSettings} business_appointment_settings
+ *
+ * Settings for appointment-type bookings.
+ *
+ *
+ * @property {boolean} support_seller_level_writes
+ *
+ * Indicates whether the seller's subscription to Square Appointments supports creating, updating or canceling an appointment through the API (true) or not (false) using seller permission.
  *
  */
-export type Break = {};
+export type BusinessBookingProfile = {
+  seller_id: string;
+  created_at: string;
+  booking_enabled: boolean;
+  customer_timezone_choice: BusinessBookingProfileCustomerTimezoneChoice;
+  booking_policy: BusinessBookingProfileBookingPolicy;
+  allow_user_cancel: boolean;
+  business_appointment_settings: BusinessAppointmentSettings;
+  support_seller_level_writes: boolean;
+};
+
+/** 
+ * BusinessHours
+The hours of operation for a location.
+ *
+ *
+ *
+ * @property {BusinessHoursPeriod [ ]} periods
+ *
+ * The list of time periods during which the business is open. There can be at most 10 periods per day.
+ *
+ */
+export type BusinessHours = {
+  periods: BusinessHoursPeriod[];
+};
+
+/** 
+ * BusinessHoursPeriod
+Represents a period of time during which a business location is open.
+ *
+ *
+ *
+ * @property {DayOfWeek} day_of_week
+ *
+ * The day of the week for this time period.
+ *
+ *
+ * @property {string} start_local_time
+ *
+ * The start time of a business hours period, specified in local time using partial-time RFC 3339 format. For example, 8:30:00 for a period starting at 8:30 in the morning. Note that the seconds value is always :00, but it is appended for conformance to the RFC.
+ *
+ *
+ * @property {string} end_local_time
+ *
+ * The end time of a business hours period, specified in local time using partial-time RFC 3339 format. For example, 21:00:00 for a period ending at 9:00 in the evening. Note that the seconds value is always :00, but it is appended for conformance to the RFC.
+ *
+ */
+export type BusinessHoursPeriod = {
+  day_of_week: DayOfWeek;
+  start_local_time: string;
+  end_local_time: string;
+};
+
+/** 
+ * BuyNowPayLaterDetails
+Additional details about a Buy Now Pay Later payment type.     
+ *
+ *
+ *
+ * @property {string} brand
+ *
+ * The brand used for the Buy Now Pay Later payment. The brand can be AFTERPAY, CLEARPAY or UNKNOWN.
+ *
+ *
+ * @property {AfterpayDetails} afterpay_details
+ *
+ * Details about an Afterpay payment. These details are only populated if the brand is AFTERPAY.
+ *
+ *
+ * @property {ClearpayDetails} clearpay_details
+ *
+ * Details about a Clearpay payment. These details are only populated if the brand is CLEARPAY.
+ *
+ */
+export type BuyNowPayLaterDetails = {
+  brand: string;
+  afterpay_details: AfterpayDetails;
+  clearpay_details: ClearpayDetails;
+};
+
+/** 
+ * Card
+Represents the payment details of a card to be used for payments.
+These details are determined by the payment token generated by Web Payments SDK.
+ *
+ *
+ *
+ * @property {string} id
+ *
+ * Read only Unique ID for this card. Generated by Square.     
+ *
+ *
+ * @property {CardBrand} card_brand
+ *
+ * Read only The card's brand.
+ *
+ *
+ * @property {string} last_4
+ *
+ * Read only The last 4 digits of the card number.
+ *
+ *
+ * @property {number} exp_month
+ *
+ * The expiration month of the associated card as an integer between 1 and 12.
+ *
+ *
+ * @property {number} exp_year
+ *
+ * The four-digit year of the card's expiration date.
+ *
+ *
+ * @property {string} cardholder_name
+ *
+ * The name of the cardholder.
+ *
+ *
+ * @property {Address} billing_address
+ *
+ * The billing address for this card.
+ *
+ *
+ * @property {string} fingerprint
+ *
+ * Read only Intended as a Square-assigned identifier, based on the card number, to identify the card across multiple locations within a single application.
+ *
+ *
+ * @property {string} customer_id
+ *
+ * Required The ID of a customer created using the Customers API to be associated with the card.
+ *
+ *
+ * @property {string} merchant_id
+ *
+ * Read only The ID of the merchant associated with the card.  
+ *
+ *
+ * @property {string} reference_id
+ *
+ * An optional user-defined reference ID that associates this card with another entity in an external system. For example, a customer ID from an external customer management system.        
+ *
+ *
+ * @property {boolean} enabled
+ *
+ * Read only Indicates whether or not a card can be used for payments.
+ *
+ *
+ * @property {CardType} card_type
+ *
+ * Read only The type of the card. The Card object includes this field only in response to Payments API calls.
+ *
+ *
+ * @property {CardPrepaidType} prepaid_type
+ *
+ * Read only Indicates whether the Card is prepaid or not. The Card object includes this field only in response to Payments API calls.
+ *
+ *
+ * @property {string} bin
+ *
+ * Read only The first six digits of the card number, known as the Bank Identification Number (BIN). Only the Payments API returns this field.
+ *
+ *
+ * @property {number} version
+ *
+ * Current version number of the card. Increments with each card update. Requests to update an existing Card object will be rejected unless the version in the request matches the current version for the Card.
+ *
+ *
+ * @property {CardCoBrand} card_co_brand
+ *
+ * Read only The card's co-brand if available. For example, an Afterpay virtual card would have a co-brand of AFTERPAY.       
+ *
+ */
+export type Card = {
+  id: string;
+  card_brand: CardBrand;
+  last_4: string;
+  exp_month: number;
+  exp_year: number;
+  cardholder_name: string;
+  billing_address: Address;
+  fingerprint: string;
+  customer_id: string;
+  merchant_id: string;
+  reference_id: string;
+  enabled: boolean;
+  card_type: CardType;
+  prepaid_type: CardPrepaidType;
+  bin: string;
+  version: number;
+  card_co_brand: CardCoBrand;
+};
 
 /**
+ * CardAutomaticallyUpdatedWebhookData
+ *
+ *
+ *
+ * @property {string} type
+ *
+ * The type of the event data object. The value is "card".
+ *
+ *
+ * @property {string} id
+ *
+ * The ID of the event data object.
+ *
+ *
+ * @property {CardAutomaticallyUpdatedWebhookObject} object
+ *
+ * An object containing the automatically updated card.
  *
  */
-export type BreakType = {};
+export type CardAutomaticallyUpdatedWebhookData = {
+  type: string;
+  id: string;
+  object: CardAutomaticallyUpdatedWebhookObject;
+};
 
 /**
+ * CardAutomaticallyUpdatedWebhookObject
+ *
+ *
+ *
+ * @property {Card} card
+ *
+ * The automatically updated card.
  *
  */
-export type BusinessAppointmentSettings = {};
+export type CardAutomaticallyUpdatedWebhookObject = {
+  card: Card;
+};
 
 /**
+ * CardCreatedWebhookData
+ *
+ *
+ *
+ * @property {string} type
+ *
+ * The type of the event data object. The value is "card".
+ *
+ *
+ * @property {string} id
+ *
+ * The ID of the event data object.
+ *
+ *
+ * @property {CardCreatedWebhookObject} object
+ *
+ * An object containing the created card.
  *
  */
-export type BusinessBookingProfile = {};
+export type CardCreatedWebhookData = {
+  type: string;
+  id: string;
+  object: CardCreatedWebhookObject;
+};
 
 /**
+ * CardCreatedWebhookObject
+ *
+ *
+ *
+ * @property {Card} card
+ *
+ * The created card.
  *
  */
-export type BusinessHours = {};
+export type CardCreatedWebhookObject = {
+  card: Card;
+};
 
 /**
+ * CardDisabledWebhookData
+ *
+ *
+ *
+ * @property {string} type
+ *
+ * The type of the event data object. The value is "card".
+ *
+ *
+ * @property {string} id
+ *
+ * The ID of the event data object.
+ *
+ *
+ * @property {CardDisabledWebhookObject} object
+ *
+ * An object containing the disabled card.
  *
  */
-export type BusinessHoursPeriod = {};
+export type CardDisabledWebhookData = {
+  type: string;
+  id: string;
+  object: CardDisabledWebhookObject;
+};
 
 /**
+ * CardDisabledWebhookObject
+ *
+ *
+ *
+ * @property {Card} card
+ *
+ * The disabled card.
  *
  */
-export type BuyNowPayLaterDetails = {};
+export type CardDisabledWebhookObject = {
+  card: Card;
+};
 
 /**
+ * CardForgottenWebhookCard
+ *
+ *
+ *
+ * @property {string} id
+ *
+ * Read only Unique ID for this card. Generated by Square.
+ *
+ *
+ * @property {string} customer_id
+ *
+ * The ID of a customer created using the Customers API associated with the card.
+ *
+ *
+ * @property {boolean} enabled
+ *
+ * Indicates whether or not a card can be used for payments.
+ *
+ *
+ * @property {string} reference_id
+ *
+ * An optional user-defined reference ID that associates this card with another entity in an external system. For example, a customer ID from an external customer management system.
+ *
+ *
+ * @property {number} version
+ *
+ * Current version number of the card. Increments with each card update. Requests to update an existing Card object will be rejected unless the version in the request matches the current version for the Card.
+ *
+ *
+ * @property {string} merchant_id
+ *
+ * The ID of the merchant associated with the card.
  *
  */
-export type Card = {};
+export type CardForgottenWebhookCard = {
+  id: string;
+  customer_id: string;
+  enabled: boolean;
+  reference_id: string;
+  version: number;
+  merchant_id: string;
+};
 
 /**
+ * CardForgottenWebhookData
+ *
+ *
+ *
+ * @property {string} type
+ *
+ * The type of the event data object. The value is "card".
+ *
+ *
+ * @property {string} id
+ *
+ * The ID of the event data object.
+ *
+ *
+ * @property {CardForgottenWebhookObject} object
+ *
+ * An object containing the forgotten card.
  *
  */
-export type CardAutomaticallyUpdatedWebhookData = {};
+export type CardForgottenWebhookData = {
+  type: string;
+  id: string;
+  object: CardForgottenWebhookObject;
+};
 
 /**
+ * CardForgottenWebhookObject
+ *
+ *
+ *
+ * @property {CardForgottenWebhookCard} card
+ *
+ * The forgotten card.
  *
  */
-export type CardAutomaticallyUpdatedWebhookObject = {};
+export type CardForgottenWebhookObject = {
+  card: CardForgottenWebhookCard;
+};
+
+/** 
+ * CardPaymentDetails
+Reflects the current status of a card payment.
+Contains only non-confidential information.
+ *
+ *
+ *
+ * @property {string} status
+ *
+ * The card payment's current state. The state can be AUTHORIZED, CAPTURED, VOIDED, or FAILED.
+ *
+ *
+ * @property {Card} card
+ *
+ * The credit card's non-confidential details.
+ *
+ *
+ * @property {string} entry_method
+ *
+ * The method used to enter the card's details for the payment. The method can be KEYED, SWIPED, EMV, ON_FILE, or CONTACTLESS.
+ *
+ *
+ * @property {string} cvv_status
+ *
+ * The status code returned from the Card Verification Value (CVV) check. The code can be CVV_ACCEPTED, CVV_REJECTED, or CVV_NOT_CHECKED.
+ *
+ *
+ * @property {string} avs_status
+ *
+ * The status code returned from the Address Verification System (AVS) check. The code can be AVS_ACCEPTED, AVS_REJECTED, or AVS_NOT_CHECKED.
+ *
+ *
+ * @property {string} auth_result_code
+ *
+ * The status code returned by the card issuer that describes the payment's authorization status.
+ *
+ *
+ * @property {string} application_identifier
+ *
+ * For EMV payments, the application ID identifies the EMV application used for the payment.
+ *
+ *
+ * @property {string} application_name
+ *
+ * For EMV payments, the human-readable name of the EMV application used for the payment.
+ *
+ *
+ * @property {string} application_cryptogram
+ *
+ * For EMV payments, the cryptogram generated for the payment. 
+ *
+ *
+ * @property {string} verification_method
+ *
+ * For EMV payments, the method used to verify the cardholder's identity. The method can be PIN, SIGNATURE, PIN_AND_SIGNATURE, ON_DEVICE, or NONE.
+ *
+ *
+ * @property {string} verification_results
+ *
+ * For EMV payments, the results of the cardholder verification. The result can be SUCCESS, FAILURE, or UNKNOWN.
+ *
+ *
+ * @property {string} statement_description
+ *
+ * The statement description sent to the card networks.        
+ *
+ *
+ * @property {DeviceDetails} device_details
+ *
+ * Deprecated: Use Payment.device_details instead. Details about the device that took the payment.
+ *
+ *
+ * @property {CardPaymentTimeline} card_payment_timeline       
+ *
+ * The timeline for card payments.
+ *
+ *
+ * @property {boolean} refund_requires_card_presence
+ *
+ * Whether the card must be physically present for the payment to be refunded. If set to true, the card must be present.      
+ *
+ *
+ * @property {Error [ ]} errors
+ *
+ * Information about errors encountered during the request.    
+ *
+ */
+export type CardPaymentDetails = {
+  status: string;
+  card: Card;
+  entry_method: string;
+  cvv_status: string;
+  avs_status: string;
+  auth_result_code: string;
+  application_identifier: string;
+  application_name: string;
+  application_cryptogram: string;
+  verification_method: string;
+  verification_results: string;
+  statement_description: string;
+  device_details: DeviceDetails;
+  card_payment_timeline: CardPaymentTimeline;
+  refund_requires_card_presence: boolean;
+  errors: Error[];
+};
+
+/** 
+ * CardPaymentTimeline
+The timeline for card payments.
+ *
+ *
+ *
+ * @property {string} authorized_at
+ *
+ * The timestamp when the payment was authorized, in RFC 3339 format.
+ *
+ *
+ * @property {string} captured_at
+ *
+ * The timestamp when the payment was captured, in RFC 3339 format.
+ *
+ *
+ * @property {string} voided_at
+ *
+ * The timestamp when the payment was voided, in RFC 3339 format.
+ *
+ */
+export type CardPaymentTimeline = {
+  authorized_at: string;
+  captured_at: string;
+  voided_at: string;
+};
 
 /**
+ * CardUpdatedWebhookData
+ *
+ *
+ *
+ * @property {string} type
+ *
+ * The type of the event data object. The value is "card".
+ *
+ *
+ * @property {string} id
+ *
+ * The ID of the event data object.
+ *
+ *
+ * @property {Card} object
+ *
+ * An object containing the updated card.
  *
  */
-export type CardCreatedWebhookData = {};
+export type CardUpdatedWebhookData = {
+  type: string;
+  id: string;
+  object: Card;
+};
 
 /**
+ * CardUpdatedWebhookObject
+ *
+ *
+ *
+ * @property {Card} card
+ *
+ * The updated card.
  *
  */
-export type CardCreatedWebhookObject = {};
+export type CardUpdatedWebhookObject = {
+  card: Card;
+};
+
+/** 
+ * CashAppDetails
+Additional details about WALLET type payments with the brand of CASH_APP.
+ *
+ *
+ *
+ * @property {string} buyer_full_name
+ *
+ * The name of the Cash App account holder.
+ *
+ *
+ * @property {string} buyer_country_code
+ *
+ * The country of the Cash App account holder, in ISO 3166-1-alpha-2 format.
+ *
+ *
+ * @property {string} buyer_cashtag
+ *
+ * Read only $Cashtag of the Cash App account holder.
+ *
+ */
+export type CashAppDetails = {
+  buyer_full_name: string;
+  buyer_country_code: Country;
+  buyer_cashtag: string;
+};
 
 /**
+ * CashDrawerDevice
+ *
+ *
+ *
+ * @property {string} id
+ *
+ * The device Square-issued ID
+ *
+ *
+ * @property {string} name
+ *
+ * The device merchant-specified name.
  *
  */
-export type CardDisabledWebhookData = {};
+export type CashDrawerDevice = {
+  id: string;
+  name: string;
+};
+
+/** 
+ * CashDrawerShift
+This model gives the details of a cash drawer shift.
+The cash_payment_money, cash_refund_money, cash_paid_in_money, and cash_paid_out_money fields are all computed by summing their respective event types.
+ *
+ *
+ *
+ * @property {string} id
+ *
+ * The shift unique ID.
+ *
+ *
+ * @property {CashDrawerShiftState} state
+ *
+ * The shift current state.
+ *
+ *
+ * @property {string} opened_at
+ *
+ * The time when the shift began, in ISO 8601 format.
+ *
+ *
+ * @property {string} ended_at
+ *
+ * The time when the shift ended, in ISO 8601 format.
+ *
+ *
+ * @property {string} closed_at
+ *
+ * The time when the shift was closed, in ISO 8601 format.     
+ *
+ *
+ * @property {string [ ]} employee_ids
+ *
+ * The IDs of all employees that were logged into Square Point of Sale at any point while the cash drawer shift was open.     
+ *
+ *
+ * @property {string} opening_employee_id
+ *
+ * The ID of the employee that started the cash drawer shift.  
+ *
+ *
+ * @property {string} ending_employee_id
+ *
+ * The ID of the employee that ended the cash drawer shift.    
+ *
+ *
+ * @property {string} closing_employee_id
+ *
+ * The ID of the employee that closed the cash drawer shift by auditing the cash drawer contents.
+ *
+ *
+ * @property {string} description
+ *
+ * The free-form text description of a cash drawer by an employee.
+ *
+ *
+ * @property {Money} opened_cash_money
+ *
+ * The amount of money in the cash drawer at the start of the shift. The amount must be greater than or equal to zero.        
+ *
+ *
+ * @property {Money} cash_payment_money
+ *
+ * The amount of money added to the cash drawer from cash payments. This is computed by summing all events with the types CASH_TENDER_PAYMENT and CASH_TENDER_CANCELED_PAYMENT. The amount is always greater than or equal to zero.
+ *
+ *
+ * @property {Money} cash_refunds_money
+ *
+ * The amount of money removed from the cash drawer from cash refunds. It is computed by summing the events of type CASH_TENDER_REFUND. The amount is always greater than or equal to zero.  
+ *
+ *
+ * @property {Money} cash_paid_in_money
+ *
+ * The amount of money added to the cash drawer for reasons other than cash payments. It is computed by summing the events of type PAID_IN. The amount is always greater than or equal to zero.
+ *
+ *
+ * @property {Money} cash_paid_out_money
+ *
+ * The amount of money removed from the cash drawer for reasons other than cash refunds. It is computed by summing the events of type PAID_OUT. The amount is always greater than or equal to zero.
+ *
+ *
+ * @property {Money} expected_cash_money
+ *
+ * The amount of money that should be in the cash drawer at the end of the shift, based on the shift's other money amounts. This can be negative if employees have not correctly recorded all the events on the cash drawer. cash_paid_out_money is a summation of amounts from cash_payment_money (zero or positive), cash_refunds_money (zero or negative), cash_paid_in_money (zero or positive), and cash_paid_out_money (zero or negative) event types.
+ *
+ *
+ * @property {Money} closed_cash_money
+ *
+ * The amount of money found in the cash drawer at the end of the shift by an auditing employee. The amount should be positive.
+ *
+ *
+ * @property {CashDrawerDevice} device
+ *
+ * The device running Square Point of Sale that was connected to the cash drawer.
+ *
+ */
+export type CashDrawerShift = {
+  id: string;
+  state: CashDrawerShiftState;
+  opened_at: string;
+  ended_at: string;
+  closed_at: string;
+  employee_ids: string[];
+};
 
 /**
+ * CashDrawerShiftEvent
+ *
+ *
+ *
+ * @property {string} id
+ *
+ * The unique ID of the event.
+ *
+ *
+ * @property {string} employee_id
+ *
+ * The ID of the employee that created the event.
+ *
+ *
+ * @property {CashDrawerEventType} event_type
+ *
+ * The type of cash drawer shift event.
+ *
+ *
+ * @property {Money} event_money
+ *
+ * The amount of money that was added to or removed from the cash drawer in the event. The amount can be positive (for added money) or zero (for other tender type payments). The addition or removal of money can be determined by by the event type.
+ *
+ *
+ * @property {string} created_at
+ *
+ * Read only The event time in ISO 8601 format.
+ *
+ *
+ * @property {string} description
+ *
+ * An optional description of the event, entered by the employee that created the event.
  *
  */
-export type CardDisabledWebhookObject = {};
+export type CashDrawerShiftEvent = {
+  id: string;
+  employee_id: string;
+  event_type: CashDrawerEventType;
+  event_money: Money;
+  created_at: string;
+  description: string;
+};
 
-/**
+/** 
+ * CashDrawerShiftSummary
+The summary of a closed cash drawer shift.
+This model contains only the money counted to start a cash drawer shift, counted at the end of the shift, and the amount that should be in the drawer at shift end based on summing all cash drawer shift events.
+ *
+ *
+ *
+ * @property {string} id
+ *
+ * The shift unique ID.
+ *
+ *
+ * @property {CashDrawerShiftState} state
+ *
+ * The shift current state.
+ *
+ *
+ * @property {string} opened_at
+ *
+ * The shift start time in ISO 8601 format.
+ *
+ *
+ * @property {string} ended_at
+ *
+ * The shift end time in ISO 8601 format.
+ *
+ *
+ * @property {string} closed_at
+ *
+ * The shift close time in ISO 8601 format.
+ *
+ *
+ * @property {string} description
+ *
+ * An employee free-text description of a cash drawer shift.   
+ *
+ *
+ * @property {Money} opened_cash_money
+ *
+ * The amount of money in the cash drawer at the start of the shift. This must be a positive amount.
+ *
+ *
+ * @property {Money} expected_cash_money
+ *
+ * The amount of money that should be in the cash drawer at the end of the shift, based on the cash drawer events on the shift. The amount is correct if all shift employees accurately recorded their cash drawer shift events. Unrecorded events and events with the wrong amount result in an incorrect expected_cash_money amount that can be negative.
+ *
+ *
+ * @property {Money} closed_cash_money
+ *
+ * The amount of money found in the cash drawer at the end of the shift by an auditing employee. The amount must be greater than or equal to zero.
  *
  */
-export type CardForgottenWebhookCard = {};
+export type CashDrawerShiftSummary = {
+  id: string;
+  state: CashDrawerShiftState;
+  opened_at: string;
+  ended_at: string;
+  closed_at: string;
+  description: string;
+  opened_cash_money: Money;
+  expected_cash_money: Money;
+  closed_cash_money: Money;
+};
 
-/**
+/** 
+ * CashPaymentDetails
+Stores details about a cash payment.
+Contains only non-confidential information. For more information, see Take Cash Payments.
+ *
+ *
+ *
+ * @property {Money} buyer_supplied_money
+ *
+ * The amount and currency of the money supplied by the buyer. 
+ *
+ *
+ * @property {Money} change_back_money
+ *
+ * The amount of change due back to the buyer. This read-only field is calculated from the amount_money and buyer_supplied_money fields.
  *
  */
-export type CardForgottenWebhookData = {};
+export type CashPaymentDetails = {
+  buyer_supplied_money: Money;
+  change_back_money: Money;
+};
 
-/**
+/** 
+ * CatalogCategory
+A category to which a CatalogItem instance belongs.
+ *
+ *
+ *
+ * @property {string} name
+ *
+ * The category name. This is a searchable attribute for use in applicable query filters, and its value length is of Unicode code points.
+ *
+ *
+ * @property {string [ ]} image_ids
+ *
+ * The IDs of images associated with this CatalogCategory instance. Currently these images are not displayed by Square, but are free to be displayed in 3rd party applications.
  *
  */
-export type CardForgottenWebhookObject = {};
-
-/**
- *
- */
-export type CardPaymentDetails = {};
-
-/**
- *
- */
-export type CardPaymentTimeline = {};
-
-/**
- *
- */
-export type CardUpdatedWebhookData = {};
-
-/**
- *
- */
-export type CardUpdatedWebhookObject = {};
-
-/**
- *
- */
-export type CashAppDetails = {};
-
-/**
- *
- */
-export type CashDrawerDevice = {};
-
-/**
- *
- */
-export type CashDrawerShift = {};
-
-/**
- *
- */
-export type CashDrawerShiftEvent = {};
-
-/**
- *
- */
-export type CashDrawerShiftSummary = {};
-
-/**
- *
- */
-export type CashPaymentDetails = {};
-
-/**
- *
- */
-export type CatalogCategory = {};
+export type CatalogCategory = {
+  name: string;
+  image_ids: string[];
+};
 
 /**
  *
